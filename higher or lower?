@@ -1,0 +1,121 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Create ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+
+-- Create Main Frame
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 300, 0, 200)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+-- Create Title Label
+local Title = Instance.new("TextLabel")
+Title.Text = "Higher or Lower Game"
+Title.Size = UDim2.new(1, 0, 0.2, 0)
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18
+Title.Parent = Frame
+
+-- Create Number Label
+local NumberLabel = Instance.new("TextLabel")
+NumberLabel.Text = "Starting Number: ..."
+NumberLabel.Size = UDim2.new(1, 0, 0.3, 0)
+NumberLabel.Position = UDim2.new(0, 0, 0.2, 0)
+NumberLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+NumberLabel.BackgroundTransparency = 1
+NumberLabel.Font = Enum.Font.SourceSans
+NumberLabel.TextSize = 20
+NumberLabel.Parent = Frame
+
+-- Create Higher Button
+local HigherButton = Instance.new("TextButton")
+HigherButton.Text = "Higher"
+HigherButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+HigherButton.Position = UDim2.new(0.05, 0, 0.55, 0)
+HigherButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+HigherButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+HigherButton.Parent = Frame
+
+-- Create Lower Button
+local LowerButton = Instance.new("TextButton")
+LowerButton.Text = "Lower"
+LowerButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+LowerButton.Position = UDim2.new(0.5, 0, 0.55, 0)
+LowerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+LowerButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+LowerButton.Parent = Frame
+
+-- Create Input Box
+local InputBox = Instance.new("TextBox")
+InputBox.PlaceholderText = "Enter a Number"
+InputBox.Size = UDim2.new(0.9, 0, 0.15, 0)
+InputBox.Position = UDim2.new(0.05, 0, 0.8, 0)
+InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+InputBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+InputBox.Parent = Frame
+
+-- Create Submit Button
+local SubmitButton = Instance.new("TextButton")
+SubmitButton.Text = "Submit Guess"
+SubmitButton.Size = UDim2.new(0.9, 0, 0.15, 0)
+SubmitButton.Position = UDim2.new(0.05, 0, 0.95, 0)
+SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SubmitButton.Parent = Frame
+
+-- Game Logic
+local currentNumber = math.random(1, 100) -- Start with a random number
+NumberLabel.Text = "Starting Number: " .. currentNumber
+
+local function generateNewNumber()
+    return math.random(1, 100)
+end
+
+local function checkGuess(guess)
+    if guess == currentNumber then
+        NumberLabel.Text = "🎉 YOU GOT IT! The number was " .. currentNumber .. "!"
+        NumberLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Green color for success
+    elseif guess > currentNumber then
+        NumberLabel.Text = "Too high! Try again!"
+        NumberLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red for wrong guess
+    else
+        NumberLabel.Text = "Too low! Try again!"
+        NumberLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end
+
+HigherButton.MouseButton1Click:Connect(function()
+    local newNumber = generateNewNumber()
+    if newNumber > currentNumber then
+        NumberLabel.Text = "✅ Correct! The number was " .. newNumber
+        currentNumber = newNumber
+    else
+        NumberLabel.Text = "❌ Wrong! The number was " .. newNumber
+    end
+end)
+
+LowerButton.MouseButton1Click:Connect(function()
+    local newNumber = generateNewNumber()
+    if newNumber < currentNumber then
+        NumberLabel.Text = "✅ Correct! The number was " .. newNumber
+        currentNumber = newNumber
+    else
+        NumberLabel.Text = "❌ Wrong! The number was " .. newNumber
+    end
+end)
+
+SubmitButton.MouseButton1Click:Connect(function()
+    local userGuess = tonumber(InputBox.Text)
+    if userGuess then
+        checkGuess(userGuess)
+    else
+        NumberLabel.Text = "Please enter a valid number!"
+    end
+end)
