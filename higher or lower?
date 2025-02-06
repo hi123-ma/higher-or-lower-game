@@ -1,3 +1,4 @@
+-- you shouldnt be here but if you want to look at the code then sure:
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
